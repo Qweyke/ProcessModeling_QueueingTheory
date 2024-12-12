@@ -6,7 +6,7 @@
 class Model
 {
   public:
-	Model(uint32_t cashboxesQnty, double handlingTime, uint32_t newCustomerAvgTime, double totalTime);
+	Model(uint32_t cashboxesQnty, double handlingTime, double customerPerTime, uint32_t totalTime);
 	void calculate();
 	void clearResults();
 	uint32_t getUnhandledCustomers();
@@ -15,8 +15,8 @@ class Model
   private:
 	const uint32_t cashboxesQnty;
 	const double handlingTime;
-	const uint32_t newCustomerAvgTime;
-	const double totalTime;
+	const double customerPerTime;
+	const uint32_t totalTime;
 
 	uint32_t unhandledCustomers;
 

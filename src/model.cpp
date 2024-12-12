@@ -1,8 +1,8 @@
 #include "model.h"
 #include <iostream>
 
-Model::Model(uint32_t cashboxesQnty, double handlingTime, uint32_t newCustomerAvgTime, double totalTime)
-    : cashboxesQnty(cashboxesQnty), handlingTime(handlingTime), newCustomerAvgTime(newCustomerAvgTime), totalTime(totalTime), unhandledCustomers(0)
+Model::Model(uint32_t cashboxesQnty, double handlingTime, double customerPerTime, uint32_t totalTime)
+    : cashboxesQnty(cashboxesQnty), handlingTime(handlingTime), customerPerTime(customerPerTime), totalTime(totalTime), unhandledCustomers(0)
 {
 	for (int i = 0; i < cashboxesQnty; i++)
 	{
@@ -17,15 +17,14 @@ Model::Model(uint32_t cashboxesQnty, double handlingTime, uint32_t newCustomerAv
 
 double Model::generateNextCustomerTime()
 {
-	return (-1 * std::log(dist(gen))) / newCustomerAvgTime;
+	double time = -1.0 / static_cast<double>(customerPerTime) * std::log(dist(gen));
+	return time;
 }
 
 void Model::calculate()
 {
 	double accumulativeTime = 0;
 	uint32_t allBusy = true;
-	/*std::cout << totalTime << " total before cycle \n";
-	std::cout << accumulativeTime << " accum before cycle \n";*/
 
 	while ((accumulativeTime += generateNextCustomerTime()) <= totalTime)
 	{
@@ -36,18 +35,13 @@ void Model::calculate()
 				cashboxes[i]++;
 				cashboxesTime[i] = accumulativeTime + handlingTime;
 				allBusy = false;
+				break;
 			}
 		}
-		/*std::cout << accumulativeTime << " accum in cycle \n";*/
 		if (allBusy)
 			unhandledCustomers++;
+		allBusy = true;
 	}
-}
-
-void Model::clearResults()
-{
-	cashboxes = std::vector<uint32_t>(cashboxesQnty, 0);
-	cashboxesTime = std::vector<double>(cashboxesQnty, 0);
 }
 
 uint32_t Model::getUnhandledCustomers()
