@@ -8,7 +8,6 @@ class Model
   public:
 	Model(uint32_t cashboxesQnty, double handlingTime, double customerPerTime, uint32_t totalTime);
 	void calculate();
-	void clearResults();
 	uint32_t getUnhandledCustomers();
 	std::vector<uint32_t> getCashboxes();
 
